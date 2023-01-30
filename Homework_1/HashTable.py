@@ -6,6 +6,7 @@ class HashTable:
     def get_hash(val):
         return val[0] *val[1] % 11
 
+    #takes a value and puts it in the hash table
     def add(self, val):
         key = self.get_hash(val)
         self.arr[key] = val
