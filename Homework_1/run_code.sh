@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import itertools
 
 support = 100
 
@@ -28,3 +29,8 @@ for key in keys_to_del:
     del freq_items[key]
 
 print(freq_items)
+
+#* Getting the canidate pairs   
+canidate_pairs = set(itertools.combinations(freq_items, 2))
+
+print(len(canidate_pairs))
