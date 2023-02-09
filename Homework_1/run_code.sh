@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import itertools
 
-support = 2
+support = 100
 
 
 #rawFrame = pd.read_table('/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt', sep = ' ', header = None, names = range(38))
@@ -22,8 +22,8 @@ support = 2
 freq_items = dict()
 
 #loop through the file and find the frequency of all the ids
-#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
-with open("test_data.txt") as file:
+with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("test_data.txt") as file:
     line_ids = list()
     for line in file:
         line_ids = line.split()
@@ -68,8 +68,8 @@ print("begin freq pairs")
 #"
 # loop through the file and for every line generate the pairs present on that line.
 # then if a pair is in the canidate paris increment the frequency
-#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
-with open("test_data.txt") as file:
+with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("test_data.txt") as file:
 
     line_ids = list()
 
@@ -120,6 +120,7 @@ print("Removing non-canidate triples")
 #"
 
 triples_to_del = list()
+dic_canidate_triples = dict()
 
 # identify non canidate triples
 for triple in canidate_triples:
@@ -133,15 +134,15 @@ for triple in canidate_triples:
             #print("correct pair", pair) #"
             count += 1
 
-    if count != 3:
+    # if the triple's subpairs are present, add it to a dictionary
+    if count == 3:
         #print("To be removed: ", triple)#"
         #canidate_triples.remove(triple)
-        triples_to_del.append(triple)
+        dic_canidate_triples[triple] = dic_canidate_triples.get(triple, 0)
 
-#remove non canidate triples
-for item in triples_to_del:
-    canidate_triples.remove(item)
+print("Got canidate triples!")#"
+print(dic_canidate_triples)
 
-print(canidate_triples)
+#print(canidate_triples)
 
 #iterate over data
