@@ -4,17 +4,13 @@ import itertools
 
 support = 100
 
-#* importing the file
-#pd.read_table('./test.txt', sep="  ", header=None)
-# reads the file data into a table with 38 rows
-
-
 
 #rawFrame = pd.read_table('/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt', sep = ' ', header = None, names = range(38))
 #rawFrame = pd.read_table('test_data.txt', sep = ' ', header = None, names = range(38))
 # rawFrame = rawFrame.transpose()
-# print(rawFrame)
-#* finding frequent items
+
+
+#* FINDING FREQUENT ITEMS
 # for row, key in rawFrame.iterrows():
 #     #print (row)
     
@@ -23,11 +19,9 @@ support = 100
 #         #else create the item in the dictionary and add 1
 #         freq_items[key[1]] = freq_items.get(key[1], 0) + 1
 
-#notice : python dictionaries are hashtables
 freq_items = dict()
 
-#generate a list of all items with their frequencies
-
+#loop through the file and find the frequency of all the ids
 with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
 #with open("test_data.txt") as file:
     line_ids = list()
@@ -35,6 +29,7 @@ with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
         line_ids = line.split()
 
         for item in line_ids:
+            #if an item is present, incerament its frequency. Otherwise add it to the list
             freq_items[item] = freq_items.get(item, 0) + 1
 
 
@@ -52,32 +47,27 @@ for key in keys_to_del:
 
 
 # #* Getting the canidate pairs   
-# # #a list of the combinations of frequent items. These combinations are tuples
 print("canidate pairs")
 #"
+# create a list of canidate pairs from the frequent items
 canidate_pairs = list(itertools.combinations(freq_items.keys(), 2))
-
-# creates a dictionary from canidate pairs
+# create a dictionary called frequent paris based on canidate_pairs
 freq_pairs =  {key: None for key in canidate_pairs}
-#initializes all the values to 0
+# set every value to zero
 freq_pairs = dict.fromkeys(freq_pairs, 0)
+
 
 
 # print("canidate_pairstype",(type(canidate_pairs)))
 # print(("canidate_pairs",canidate_pairs))
 # print("len",len(canidate_pairs))
 
-#* delete non frequent items
-
-
-
-
-
 
 #* Getting the freqent pairs
-#print("freq_paris b4 weeding", freq_pairs)
 print("begin freq pairs")
 #"
+# loop through the file and for every line generate the pairs present on that line.
+# then if a pair is in the canidate paris increment the frequency
 with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
 #with open("test_data.txt") as file:
 
@@ -104,17 +94,42 @@ keys_to_del = [key for key in freq_pairs if freq_pairs[key] < support]
 for key in keys_to_del:
     del freq_pairs[key]
 
+#print(freq_pairs)
 
+#* finding canidate triples
 
+print("Generating triples")
+#"
 
+#first generate all possible triples
+canidate_triples = list(itertools.combinations(freq_items.keys(), 3))
+#print(canidate_triples)
 
-print(freq_pairs)
-print("fin")
+print("Removing non-canidate triples")
+#"
 
+triples_to_del = list()
 
-# #* Finding frequent pairs
-#iterate over rawFrame checking if each basket contains a pair
-# for basket in rawFrame.iterrows():
-#     print(basket[1])
-# # # #           
-# # canidate_pairs_dict = dict(canidate_pairs)
+# identify non canidate triples
+for triple in canidate_triples:
+    # generate pairs from triple
+    sub_pairs = list(itertools.permutations(triple, 2))
+    
+    # check to see if the subpairs are frequent
+    count = 0
+    for pair in sub_pairs:
+        if pair in freq_pairs.keys():
+            #print("correct pair", pair) #"
+            count += 1
+
+    if count != 3:
+        #print("To be removed: ", triple)#"
+        canidate_triples.remove(triple)
+
+# remove non canidate triples
+# for item in triples_to_del:
+#     canidate_triples.remove(item)
+
+print(canidate_triples)
+
+#iterate over data
