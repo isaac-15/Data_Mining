@@ -114,9 +114,7 @@ for tuple in freq_pairs:
 
 #first generate all possible triples
 canidate_triples = list(itertools.combinations(items, 3))
-#print(canidate_triples)
 
-print("Removing non-canidate triples")
 #"
 
 triples_to_del = list()
@@ -141,9 +139,43 @@ for triple in canidate_triples:
         dic_canidate_triples[triple] = dic_canidate_triples.get(triple, 0)
 
 print("Got canidate triples!")#"
-print(dic_canidate_triples)
+#print(dic_canidate_triples)
+
+
+with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("test_data.txt") as file:
+
+    line_ids = list()
+
+    for line in file:
+        line_ids = line.split()
+        #print(ids)
+        line_triples = list(itertools.permutations(line_ids, 3))  
+        #print(line_pairs)
+
+        for item in line_triples:
+            if dic_canidate_triples.get(item) != None:
+                dic_canidate_triples[item] += 1
+                #print("added 1")
+
+#"
+print("counted canidate triples")#"
 
 
 #print(canidate_triples)
 
 #iterate over data
+
+
+#create a list of keys to delete
+keys_to_del = [key for key in dic_canidate_triples if dic_canidate_triples[key] < support]
+#print("keys to delete", keys_to_del)
+
+
+#delete those items
+for key in keys_to_del:
+    del dic_canidate_triples[key]
+
+print("Suported triples") #"
+
+print(dic_canidate_triples)
