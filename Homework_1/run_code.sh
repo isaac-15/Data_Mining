@@ -101,8 +101,19 @@ for key in keys_to_del:
 print("Generating triples")
 #"
 
+
+# generate list of items in the frequent pairs
+items = set()
+
+for tuple in freq_pairs:
+    items.add(tuple[0])
+    items.add(tuple[1])
+    
+#print(items)
+
+
 #first generate all possible triples
-canidate_triples = list(itertools.combinations(freq_items.keys(), 3))
+canidate_triples = list(itertools.combinations(items, 3))
 #print(canidate_triples)
 
 print("Removing non-canidate triples")
