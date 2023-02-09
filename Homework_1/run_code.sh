@@ -143,6 +143,7 @@ for triple in canidate_triples:
 print("Got canidate triples!")#"
 print(dic_canidate_triples)
 
+
 #print(canidate_triples)
 
 #iterate over data
