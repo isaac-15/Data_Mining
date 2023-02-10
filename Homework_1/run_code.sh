@@ -207,4 +207,78 @@ values = list(item_assosiation.values())
 sorted_value_index = np.argsort(values)
 item_assosiation_sorted = {keys[i] : values[i] for i in sorted_value_index}
 
+print("---------------------------------")
 print(item_assosiation_sorted)
+
+print("---------------------------------")
+
+
+
+pair_assosiation = dict()
+#print(dic_canidate_triples)
+
+
+for triple in dic_canidate_triples:
+    print(triple) 
+    x =triple[0]
+    y =triple[1]
+    z =triple[2]
+    print(x,", ",y, ", ",z)#" 
+    
+    xy = (x, y)
+    yx = (y, x)
+
+    yz = (y, z)
+    zy = (z, y)
+
+    xz = (x, z)
+    zx = (z, x)
+
+    xyz = (xy, z)
+    yxz = (yz, z)
+
+    yzx = (yz, x)
+    zyx = (zy, x)
+
+    xzy = (xz, y)
+    zxy = (zx, y)
+    
+
+    if freq_pairs.get(xy) != None:
+        #print("xy")
+        pair_assosiation[xyz] = pair_assosiation.get(xyz, (dic_canidate_triples[triple]/freq_pairs[xy]))
+ 
+    if freq_pairs.get(yx) != None:
+        pair_assosiation[yxz] = pair_assosiation.get(yxz, (dic_canidate_triples[triple]/freq_pairs[yx]))
+        print("yx")
+
+    if freq_pairs.get(yz) != None:
+        pair_assosiation[yzx] = pair_assosiation.get(yzx, (dic_canidate_triples[triple]/freq_pairs[yz]))
+        #print("yz")
+        #print(pair_assosiation[yz])
+
+    if freq_pairs.get(zy) != None:
+        pair_assosiation[zyx] = pair_assosiation.get(zyx, (dic_canidate_triples[triple]/freq_pairs[zy]))
+        #print("zy")
+
+    if freq_pairs.get(xz) != None:
+        pair_assosiation[xzy] = pair_assosiation.get(xzy, (dic_canidate_triples[triple]/freq_pairs[xz]))
+        
+        #print("xz")
+
+    if freq_pairs.get(zx) != None:
+        pair_assosiation[zxy] = pair_assosiation.get(zxy, (dic_canidate_triples[triple]/freq_pairs[zx]))
+        #print("zx")
+
+    #print(pair_assosiation)
+    
+    # yz = (triple[1] ++ triple[2])
+    # xz = (triple[1] ++ triple[2])
+
+    #xy_freq = freq_pairs[xy]
+    #print(xy_freq)
+    # yz_freq = freq_pairs[yz]
+    # xz_freq = freq_pairs[xz]
+
+    #pair_assosiation[xy] = pair_assosiation.get(xy, (dic_canidate_triples[triple], ))
+print(pair_assosiation)
