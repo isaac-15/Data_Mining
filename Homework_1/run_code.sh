@@ -1,8 +1,10 @@
 import pandas as pd
+from collections import OrderedDict 
 import numpy as np
 import itertools
 
-support = 100
+support = 8
+
 
 
 #rawFrame = pd.read_table('/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt', sep = ' ', header = None, names = range(38))
@@ -20,10 +22,12 @@ support = 100
 #         freq_items[key[1]] = freq_items.get(key[1], 0) + 1
 
 freq_items = dict()
+total_items = 0
 
 #loop through the file and find the frequency of all the ids
-with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
 #with open("test_data.txt") as file:
+with open("browsingdata_50baskets.txt") as file:
     line_ids = list()
     for line in file:
         line_ids = line.split()
@@ -32,7 +36,8 @@ with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
             #if an item is present, incerament its frequency. Otherwise add it to the list
             freq_items[item] = freq_items.get(item, 0) + 1
 
-
+total_items = len(freq_items)
+print(total_items, "tot items")
 #create a list of keys to delete
 keys_to_del = [key for key in freq_items if freq_items[key] < support]
 
@@ -68,7 +73,8 @@ print("begin freq pairs")
 #"
 # loop through the file and for every line generate the pairs present on that line.
 # then if a pair is in the canidate paris increment the frequency
-with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
     line_ids = list()
@@ -94,9 +100,9 @@ keys_to_del = [key for key in freq_pairs if freq_pairs[key] < support]
 for key in keys_to_del:
     del freq_pairs[key]
 
-#print(freq_pairs)
+print("freq pairs", freq_pairs)
 
-#* finding canidate triples
+#* FIND CANIDATE TRIPLES
 
 print("Generating triples")
 #"
@@ -141,8 +147,10 @@ for triple in canidate_triples:
 print("Got canidate triples!")#"
 #print(dic_canidate_triples)
 
+#* FIND FREQUENCY OF TRIPLES
 
-with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
     line_ids = list()
@@ -166,6 +174,7 @@ print("counted canidate triples")#"
 
 #iterate over data
 
+#* DELETE UNSUPPORTED TRIPPLES
 
 #create a list of keys to delete
 keys_to_del = [key for key in dic_canidate_triples if dic_canidate_triples[key] < support]
@@ -178,4 +187,24 @@ for key in keys_to_del:
 
 print("Suported triples") #"
 
-print(dic_canidate_triples)
+#* FIND ASSOSIATIONS
+
+item_assosiation = dict()
+pair_assosiation = dict()
+
+
+for pair in freq_pairs:
+    item = freq_items[pair[0]]
+    item2 = freq_items[pair[1]]
+    pair2 = (pair[1],pair[0])
+
+    item_assosiation[pair2] = item_assosiation.get(pair2, (freq_pairs[pair]/(item2)))
+    item_assosiation[pair] = item_assosiation.get(pair, (freq_pairs[pair]/item))
+
+#sort item assosiation
+keys = list(item_assosiation.keys())
+values = list(item_assosiation.values())
+sorted_value_index = np.argsort(values)
+item_assosiation_sorted = {keys[i] : values[i] for i in sorted_value_index}
+
+print(item_assosiation_sorted)
