@@ -2,6 +2,7 @@ import pandas as pd
 from collections import OrderedDict 
 import numpy as np
 import itertools
+from operator import itemgetter
 
 support = 8
 
@@ -202,15 +203,15 @@ for pair in freq_pairs:
     item_assosiation[pair] = item_assosiation.get(pair, (freq_pairs[pair]/item))
 
 #sort item assosiation
-keys = list(item_assosiation.keys())
-values = list(item_assosiation.values())
-sorted_value_index = np.argsort(values)
-item_assosiation_sorted = {keys[i] : values[i] for i in sorted_value_index}
+# keys = list(item_assosiation.keys())
+# values = list(item_assosiation.values())
+# sorted_value_index = np.argsort(values)
+# item_assosiation_sorted = {keys[i] : values[i] for i in sorted_value_index}
 
-print("---------------------------------")
-print(item_assosiation_sorted)
+# print("---------------------------------")
+# print(item_assosiation_sorted)
 
-print("---------------------------------")
+# print("---------------------------------")
 
 
 
@@ -234,14 +235,14 @@ for triple in dic_canidate_triples:
     xz = (x, z)
     zx = (z, x)
 
-    xyz = (xy, z)
-    yxz = (yz, z)
+    xyz = (x, y, z)
+    yxz = (y, z, z)
 
-    yzx = (yz, x)
-    zyx = (zy, x)
+    yzx = (y, z, x)
+    zyx = (z, y, x)
 
-    xzy = (xz, y)
-    zxy = (zx, y)
+    xzy = (x, z, y)
+    zxy = (z, x, y)
     
 
     if freq_pairs.get(xy) != None:
@@ -281,4 +282,16 @@ for triple in dic_canidate_triples:
     # xz_freq = freq_pairs[xz]
 
     #pair_assosiation[xy] = pair_assosiation.get(xy, (dic_canidate_triples[triple], ))
-print(pair_assosiation)
+
+res = list(sorted(item_assosiation.items(), key = itemgetter(1), reverse = True)[:5])
+print("OUTPUT A")#"
+for item in res:
+    print(item[0], " ", item[1])
+
+
+
+res2 = list(sorted(pair_assosiation.items(), key = itemgetter(1), reverse = True)[:5])
+
+print("OUTPUT B")#"
+for item in res2:
+    print(item[0], " ", item[1])
