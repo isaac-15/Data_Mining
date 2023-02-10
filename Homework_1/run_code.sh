@@ -4,7 +4,7 @@ import numpy as np
 import itertools
 from operator import itemgetter
 
-support = 8
+support = 100
 
 
 
@@ -26,9 +26,9 @@ freq_items = dict()
 total_items = 0
 
 #loop through the file and find the frequency of all the ids
-#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
+with open("browsing-data-copy.txt") as file:
 #with open("test_data.txt") as file:
-with open("browsingdata_50baskets.txt") as file:
+#with open("browsingdata_50baskets.txt") as file:
     line_ids = list()
     for line in file:
         line_ids = line.split()
@@ -38,7 +38,7 @@ with open("browsingdata_50baskets.txt") as file:
             freq_items[item] = freq_items.get(item, 0) + 1
 
 total_items = len(freq_items)
-print(total_items, "tot items")
+#print(total_items, "tot items")
 #create a list of keys to delete
 keys_to_del = [key for key in freq_items if freq_items[key] < support]
 
@@ -53,9 +53,9 @@ for key in keys_to_del:
 
 
 # #* Getting the canidate pairs   
-print("canidate pairs")
+#print("canidate pairs")
 #"
-# create a list of canidate pairs from the frequent items
+#("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") create a list of canidate pairs from the frequent items
 canidate_pairs = list(itertools.combinations(freq_items.keys(), 2))
 # create a dictionary called frequent paris based on canidate_pairs
 freq_pairs =  {key: None for key in canidate_pairs}
@@ -70,12 +70,12 @@ freq_pairs = dict.fromkeys(freq_pairs, 0)
 
 
 #* Getting the freqent pairs
-print("begin freq pairs")
+#print("begin freq pairs")
 #"
 # loop through the file and for every line generate the pairs present on that line.
 # then if a pair is in the canidate paris increment the frequency
-#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
-with open("browsingdata_50baskets.txt") as file:
+with open("browsing-data-copy.txt") as file:
+#with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
     line_ids = list()
@@ -101,26 +101,32 @@ keys_to_del = [key for key in freq_pairs if freq_pairs[key] < support]
 for key in keys_to_del:
     del freq_pairs[key]
 
-print("freq pairs", freq_pairs)
+#print("freq pairs", freq_pairs)
 
 #* FIND CANIDATE TRIPLES
 
-print("Generating triples")
+#print("Generating triples")
 #"
 
 
 # generate list of items in the frequent pairs
-items = set()
+# *items = set()
+
+# *for tuple in freq_pairs:
+#  *   items.add(tuple[0])
+#   *  items.add(tuple[1])
+
+canidate_triples = list()
 
 for tuple in freq_pairs:
-    items.add(tuple[0])
-    items.add(tuple[1])
+    for item in freq_items:
+        canidate_triples.append((tuple[0], tuple[1], item))
     
 #print(items)
 
 
 #first generate all possible triples
-canidate_triples = list(itertools.combinations(items, 3))
+#*canidate_triples = list(itertools.combinations(items, 3))
 
 #"
 
@@ -145,13 +151,13 @@ for triple in canidate_triples:
         #canidate_triples.remove(triple)
         dic_canidate_triples[triple] = dic_canidate_triples.get(triple, 0)
 
-print("Got canidate triples!")#"
+#print("Got canidate triples!")#"
 #print(dic_canidate_triples)
 
 #* FIND FREQUENCY OF TRIPLES
 
-#with open("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") as file:
-with open("browsingdata_50baskets.txt") as file:
+with open("browsing-data-copy.txt") as file:
+#with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
     line_ids = list()
@@ -168,7 +174,7 @@ with open("browsingdata_50baskets.txt") as file:
                 #print("added 1")
 
 #"
-print("counted canidate triples")#"
+#print("counted canidate triples")#"
 
 
 #print(canidate_triples)
@@ -186,7 +192,7 @@ keys_to_del = [key for key in dic_canidate_triples if dic_canidate_triples[key] 
 for key in keys_to_del:
     del dic_canidate_triples[key]
 
-print("Suported triples") #"
+#print("Suported triples") #"
 
 #* FIND ASSOSIATIONS
 
@@ -220,11 +226,11 @@ pair_assosiation = dict()
 
 
 for triple in dic_canidate_triples:
-    print(triple) 
+    #print(triple) 
     x =triple[0]
     y =triple[1]
     z =triple[2]
-    print(x,", ",y, ", ",z)#" 
+    #print(x,", ",y, ", ",z)#" 
     
     xy = (x, y)
     yx = (y, x)
@@ -251,7 +257,7 @@ for triple in dic_canidate_triples:
  
     if freq_pairs.get(yx) != None:
         pair_assosiation[yxz] = pair_assosiation.get(yxz, (dic_canidate_triples[triple]/freq_pairs[yx]))
-        print("yx")
+        #print("yx")
 
     if freq_pairs.get(yz) != None:
         pair_assosiation[yzx] = pair_assosiation.get(yzx, (dic_canidate_triples[triple]/freq_pairs[yz]))
@@ -290,7 +296,11 @@ for item in res:
 
 
 
-res2 = list(sorted(pair_assosiation.items(), key = itemgetter(1), reverse = True)[:5])
+res2 = list(sorted(pair_assosiation.items(), key = itemgetter(1), reverse = True)[:15])
+
+res2 = sorted(res2)
+
+res2 = res2[0:15]
 
 print("OUTPUT B")#"
 for item in res2:
