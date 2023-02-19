@@ -26,7 +26,7 @@ freq_items = dict()
 total_items = 0
 
 #loop through the file and find the frequency of all the ids
-with open("browsing-data-copy.txt") as file:
+with open("./browsing-data-copy.txt") as file:
 #with open("test_data.txt") as file:
 #with open("browsingdata_50baskets.txt") as file:
     line_ids = list()
@@ -57,12 +57,27 @@ for key in keys_to_del:
 #"
 #("/home/isaac/Repos/Data_Mining/Homework_1/browsing-data.txt") create a list of canidate pairs from the frequent items
 canidate_pairs = list(itertools.combinations(freq_items.keys(), 2))
+canidate_pairs_sorted = list()
+
+for key in canidate_pairs:
+    if key[1] < key[0]:
+        newtup = (key[1], key[0])
+        canidate_pairs_sorted.append(newtup)
+        #print("true", key, newtup)
+
+    else:
+        canidate_pairs_sorted.append(key)
+
+#print(canidate_pairs_sorted)
+        
+
+
+
+
 # create a dictionary called frequent paris based on canidate_pairs
-freq_pairs =  {key: None for key in canidate_pairs}
+freq_pairs =  {key: None for key in canidate_pairs_sorted}
 # set every value to zero
 freq_pairs = dict.fromkeys(freq_pairs, 0)
-
-
 
 # print("canidate_pairstype",(type(canidate_pairs)))
 # print(("canidate_pairs",canidate_pairs))
@@ -74,7 +89,7 @@ freq_pairs = dict.fromkeys(freq_pairs, 0)
 #"
 # loop through the file and for every line generate the pairs present on that line.
 # then if a pair is in the canidate paris increment the frequency
-with open("browsing-data-copy.txt") as file:
+with open("./browsing-data-copy.txt") as file:
 #with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
@@ -156,7 +171,7 @@ for triple in canidate_triples:
 
 #* FIND FREQUENCY OF TRIPLES
 
-with open("browsing-data-copy.txt") as file:
+with open("./browsing-data-copy.txt") as file:
 #with open("browsingdata_50baskets.txt") as file:
 #with open("test_data.txt") as file:
 
@@ -289,19 +304,26 @@ for triple in dic_canidate_triples:
 
     #pair_assosiation[xy] = pair_assosiation.get(xy, (dic_canidate_triples[triple], ))
 
-res = list(sorted(item_assosiation.items(), key = itemgetter(1), reverse = True)[:5])
-print("OUTPUT A")#"
-for item in res:
-    print(item[0], " ", item[1])
+with open('./output.txt', 'w') as f:
+
+    res = list(sorted(item_assosiation.items(), key = itemgetter(1), reverse = True)[:5])
+    f.write("OUTPUT A\n")
+    for item in res:
+        string = str() #"
+        string = str(item[0]) + " " + str(item[1]) + "\n"
+        f.write(string)
 
 
+    f.write("\n")
 
-res2 = list(sorted(pair_assosiation.items(), key = itemgetter(1), reverse = True)[:15])
+    res2 = list(sorted(pair_assosiation.items(), key = itemgetter(1), reverse = True)[:15])
 
-res2 = sorted(res2)
+    res2 = sorted(res2)
 
-res2 = res2[0:15]
+    res2 = res2[0:5]
 
-print("OUTPUT B")#"
-for item in res2:
-    print(item[0], " ", item[1])
+    f.write("OUTPUT B\n")
+    for item in res2:
+        string = str()
+        string = str(item[0]) + " " + str(item[1]) + "\n"
+        f.write(string)
